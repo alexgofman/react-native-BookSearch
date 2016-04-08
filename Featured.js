@@ -2,31 +2,27 @@
 
 import React, {
   StyleSheet,
-  View,
-  Text,
+  NavigatorIOS,
   Component
 } from 'react-native';
 
+import BookList from './BookList';
+
 const styles = StyleSheet.create({
-  description: {
-    fontSize: 20,
-    backgroundColor: 'white'
-  },
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    flex: 1
   }
 });
 
 class Featured extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.description}>
-          Featured tab
-        </Text>
-      </View>
+      <NavigatorIOS
+        style={styles.container}
+        initialRoute={{
+          title: 'Featured Books',
+          component: BookList
+        }}/>
     );
   }
 }

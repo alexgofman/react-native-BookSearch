@@ -2,31 +2,27 @@
 
 import React, {
   StyleSheet,
-  View,
-  Text,
+  NavigatorIOS,
   Component
 } from 'react-native';
 
+import SearchBooks from './SearchBooks';
+
 const styles = StyleSheet.create({
-  description: {
-    fontSize: 20,
-    backgroundColor: 'white'
-  },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
   }
 });
 
 class Search extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.description}>
-          Search tab
-        </Text>
-      </View>
+      <NavigatorIOS
+        style={styles.container}
+        initialRoute={{
+          title: 'Search Books',
+          component: SearchBooks
+        }}/>
     );
   }
 }
