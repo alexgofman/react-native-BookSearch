@@ -31,4 +31,4 @@ class Featured extends Component {
   }
 }
 
-module.extends = Featured;
+module.exports = Featured;
