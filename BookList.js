@@ -5,7 +5,9 @@ import React, {
   StyleSheet,
   Text,
   View,
-  Component
+  Component,
+  ListView,
+  TouchableHighlight
 } from 'react-native';
  
 const FAKE_BOOK_DATA = [{
@@ -41,21 +43,56 @@ const styles = StyleSheet.create({
   },
   author: {
     color: '#656565'
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#dddddd'
   }
 });
  
 class BookList extends Component {
-	render() {
-    const book = FAKE_BOOK_DATA[0];
-		return (
-      <View style={styles.container}>
-        <Image source={{uri: book.volumeInfo.imageLinks.thumbnail}}
-          style={styles.thumbnail}/>
-        <View style={styles.rightContainer}>
-          <Text style={styles.title}>{book.volumeInfo.title}</Text>
-          <Text style={styles.author}>{book.volumeInfo.authors}</Text>
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: new ListView.DataSource({
+        rowHasChanged: (row1, row2) => row1 !== row2
+      })
+    };
+  }
+
+  renderBook(book) {
+    return (
+      <TouchableHighlight>
+        <View>
+          <View style={styles.container}>
+						<Image
+            	source={{uri: book.volumeInfo.imageLinks.thumbnail}}
+              style={styles.thumbnail} />
+            <View style={styles.rightContainer}>
+            	<Text style={styles.title}>{book.volumeInfo.title}</Text>
+              <Text style={styles.author}>{book.volumeInfo.authors}</Text>
+            </View>
+          </View>
+					<View style={styles.separator} />
         </View>
-	    </View>             
+      </TouchableHighlight>
+    );
+  }
+
+  componentDidMount() {
+    const books = FAKE_BOOK_DATA;
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(books)
+    });
+  }
+
+	render() {
+		return (
+      <ListView
+        dataSource={this.state.dataSource}
+        renderRow={this.renderBook.bind(this)}
+        style={styles.listView}
+      />
     );
   }
 }
