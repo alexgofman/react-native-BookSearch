@@ -7,18 +7,11 @@ import React, {
   View,
   Component,
   ListView,
-  TouchableHighlight
+  TouchableHighlight,
+  ActivityIndicatorIOS
 } from 'react-native';
  
-const FAKE_BOOK_DATA = [{
-  volumeInfo: {
-    title: 'The Catcher in the Rye',
-    authors: "J. D. Salinger",
-    imageLinks: {
-      thumbnail: 'http://books.google.com/books/content?id=PCDengEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api'
-    }
-  }
-}];
+const REQUEST_URL = 'https://www.googleapis.com/books/v1/volumes?q=subject:fiction';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,6 +40,14 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: '#dddddd'
+  },
+  listView: {
+    backgroundColor: '#F5FCFF'
+  },
+  loading: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
  
@@ -54,6 +55,7 @@ class BookList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: true,
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2
       })
@@ -80,19 +82,42 @@ class BookList extends Component {
   }
 
   componentDidMount() {
-    const books = FAKE_BOOK_DATA;
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(books)
-    });
+    this.fetchData();
+  }
+
+  fetchData() {
+    fetch(REQUEST_URL)
+    .then((response) => response.json())
+    .then((responseData) => {
+          this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(responseData.items),
+            isLoading: false
+          });
+    })
+    .done();
   }
 
 	render() {
+    if (this.state.isLoading) {
+      return this.renderLoadingView();
+    }
 		return (
       <ListView
         dataSource={this.state.dataSource}
         renderRow={this.renderBook.bind(this)}
         style={styles.listView}
       />
+    );
+  }
+
+  renderLoadingView() {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicatorIOS size='large'/>
+        <Text>
+          Loading books...
+        </Text>
+      </View>
     );
   }
 }
