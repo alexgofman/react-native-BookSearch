@@ -10,6 +10,8 @@ import React, {
   TouchableHighlight,
   ActivityIndicatorIOS
 } from 'react-native';
+
+import BookDetail from './BookDetail';
  
 const REQUEST_URL = 'https://www.googleapis.com/books/v1/volumes?q=subject:fiction';
 
@@ -64,7 +66,7 @@ class BookList extends Component {
 
   renderBook(book) {
     return (
-      <TouchableHighlight>
+      <TouchableHighlight onPress={() => this.showBookDetail(book)}  underlayColor='#dddddd'>
         <View>
           <View style={styles.container}>
 						<Image
@@ -119,6 +121,14 @@ class BookList extends Component {
         </Text>
       </View>
     );
+  }
+
+	showBookDetail(book) {
+    this.props.navigator.push({
+      title: book.volumeInfo.title,
+      component: BookDetail,
+      passProps: {book}
+    });
   }
 }
  
