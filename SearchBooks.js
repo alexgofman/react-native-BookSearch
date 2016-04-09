@@ -78,8 +78,8 @@ class SearchBooks extends Component {
       <View style={styles.container}>
         <Text style={styles.instructions}>Search by book title and/or author</Text>
         <View>
-          <Text style={styles.fieldLabel}>Author:</Text>
-          <TextInput styles={styles.searchInput} onChange={this.bookAuthorInput.bind(this)}/>
+          <Text style={styles.fieldLabel}>Book Title:</Text>
+          <TextInput style={styles.searchInput} onChange={this.bookTitleInput.bind(this)}/>
         </View>
         <View>
           <Text style={styles.fieldLabel}>Author:</Text>
@@ -114,7 +114,7 @@ class SearchBooks extends Component {
 
   fetchData() {
     this.setState({ isLoading: true });
-    const baseURL = 'https://www.googleapis.com/books/v1/volumes?q=';
+    var baseURL = 'https://www.googleapis.com/books/v1/volumes?q=';
     if (this.state.bookAuthor !== '') {
       baseURL += encodeURIComponent('inauthor:' + this.state.bookAuthor);
     }
